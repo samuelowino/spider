@@ -1,0 +1,10 @@
+/build
+.bin
+.lock
+.swp
+/.idea
+.vscode
+.temp
+.tmp
+.gradle/
+/.gradle
