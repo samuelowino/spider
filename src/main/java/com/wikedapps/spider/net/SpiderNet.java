@@ -1,7 +1,5 @@
 package com.wikedapps.spider.net;
 
-import com.wikedapps.spider.io.FileUtils;
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -42,7 +40,7 @@ public class SpiderNet {
     public static void printData() throws IOException, URISyntaxException {
         CloseableHttpResponse httpResponse = executeHttpRequest("url");
         byte[] data = decodeHttpsResponseContent(httpResponse);
-        //String stringContent = FileUtils.decodeByteArrayToString(data);
+        //String stringContent = SpiderFileUtils.decodeByteArrayToString(data);
         System.err.print(new String(data, StandardCharsets.UTF_8));
     }
 
