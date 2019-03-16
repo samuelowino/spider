@@ -29,7 +29,7 @@ public class SpiderFileUtils {
         for (File file : dir.listFiles()) {
             PDDocument document = PDDocument.load(file);
             PDFTextStripper textStripper = new PDFTextStripper();
-            textStripper.setLineSeparator("\\n");
+            //textStripper.setLineSeparator("\\n");
             textStripper.setEndBookmark(new PDOutlineItem());
             String contVal = textStripper.getText(document);
 
@@ -47,18 +47,18 @@ public class SpiderFileUtils {
     public static String cleanExtractedContent(String rawText) {
         String finalCleanText = new String();
         finalCleanText = rawText.replace("'", "");
+        //finalCleanText = finalCleanText.replaceAll("([\\/\\/])","\\\n\\\n");
         finalCleanText = finalCleanText.replace(" \" ", "");
         finalCleanText = finalCleanText.replace("<", "&lt;");
         finalCleanText = finalCleanText.replace(">", "&gt;");
         finalCleanText = finalCleanText.replaceAll("([\\[\\d*\\]])", "");
-        finalCleanText = finalCleanText.replaceAll("See also", "replace*");
-        finalCleanText = finalCleanText.replaceAll("https", "replace*");
+        finalCleanText = finalCleanText.replace("See also", "");
         finalCleanText = finalCleanText.replaceAll("\"", " ");
-        finalCleanText = finalCleanText.replaceAll("wikipedia", " ");
-        finalCleanText = finalCleanText.replaceAll("Wikipedia", " ");
-        finalCleanText = finalCleanText.replaceAll("WIKIPEDIA", " ");
-        finalCleanText = finalCleanText.replaceAll("org/wiki/", " ");
-        finalCleanText = finalCleanText.replaceAll("en", " ");
+        finalCleanText = finalCleanText.replace("wikipedia", " ");
+        finalCleanText = finalCleanText.replace("Wikipedia", " ");
+        finalCleanText = finalCleanText.replace("WIKIPEDIA", " ");
+        finalCleanText = finalCleanText.replace("org/wiki/", " ");
+        finalCleanText = finalCleanText.replaceAll("&","and");
         return finalCleanText;
     }
 
