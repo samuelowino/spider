@@ -2,6 +2,7 @@ package com.wikedapps.spider.io;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 import java.io.File;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 
 public class SpiderFileUtils {
 
-    public static String decodeByteArrayToString(byte[] byteData){
+    public static String decodeByteArrayToString(byte[] byteData) {
         byte[] decodedData = Base64.getDecoder().decode(byteData);
         return new String(decodedData);
     }
@@ -23,37 +24,56 @@ public class SpiderFileUtils {
         return content;
     }
 
-    public static HashMap<String,String> readFileInDir(File dir) throws IOException {
-        HashMap<String,String> content = new HashMap<>();
+    public static HashMap<String, String> readFileInDir(File dir) throws IOException {
+        HashMap<String, String> content = new HashMap<>();
         for (File file : dir.listFiles()) {
             PDDocument document = PDDocument.load(file);
             PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setLineSeparator("\\n");
+            textStripper.setEndBookmark(new PDOutlineItem());
             String contVal = textStripper.getText(document);
-            content.put(file.getName(),contVal);
+
+            System.err.println(contVal);
+
+            String cleanContent = cleanExtractedContent(contVal);
+            content.put(file.getName(), cleanContent);
+
+            document.close();
         }
 
         return content;
     }
 
-    public static String cleanExtractedContent(String rawText){
+    public static String cleanExtractedContent(String rawText) {
         String finalCleanText = new String();
-        finalCleanText = rawText.replace("'","");
-        finalCleanText = finalCleanText.replace(" \" ","");
-        finalCleanText = finalCleanText.replace("<","&lt;");
-        finalCleanText = finalCleanText.replace(">","&gt;");
-        finalCleanText = finalCleanText.replaceAll("([\\[\\d*\\]])","");
-        finalCleanText = finalCleanText.replace("//","\n");
-        finalCleanText = finalCleanText.replaceAll("See also","replace*");
-        finalCleanText = finalCleanText.replaceAll("https","replace*");
-        finalCleanText = finalCleanText.replaceAll("\""," ");
+        finalCleanText = rawText.replace("'", "");
+        finalCleanText = finalCleanText.replace(" \" ", "");
+        finalCleanText = finalCleanText.replace("<", "&lt;");
+        finalCleanText = finalCleanText.replace(">", "&gt;");
+        finalCleanText = finalCleanText.replaceAll("([\\[\\d*\\]])", "");
+        finalCleanText = finalCleanText.replaceAll("See also", "replace*");
+        finalCleanText = finalCleanText.replaceAll("https", "replace*");
+        finalCleanText = finalCleanText.replaceAll("\"", " ");
+        finalCleanText = finalCleanText.replaceAll("wikipedia", " ");
+        finalCleanText = finalCleanText.replaceAll("Wikipedia", " ");
+        finalCleanText = finalCleanText.replaceAll("WIKIPEDIA", " ");
+        finalCleanText = finalCleanText.replaceAll("org/wiki/", " ");
+        finalCleanText = finalCleanText.replaceAll("en", " ");
         return finalCleanText;
     }
 
     public static void main(String args[]) throws IOException {
 
-        File pdfFile = new File("/home/muzima/Desktop/Biochemistry - Wikipedia.pdf");
-        String content = readFile(pdfFile);
-        String cleanText = cleanExtractedContent(content);
-        System.out.print(cleanText);
+        File pdfFile = new File("/home/muzima/Desktop/content II");
+        HashMap<String, String> content = readFileInDir(pdfFile);
+
+        for (String fileName : content.keySet()) {
+            File newFile = new File("/home/muzima/Desktop/R/" + fileName + ".txt");
+            boolean isFileReady = newFile.createNewFile();
+            if (isFileReady)
+                FileUtils.writeStringToFile(newFile, content.get(fileName));
+            else
+                throw new AssertionError("Unable to write to file, File was not created or is not ready");
+        }
     }
 }
