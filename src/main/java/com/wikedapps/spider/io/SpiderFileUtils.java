@@ -29,7 +29,6 @@ public class SpiderFileUtils {
         for (File file : dir.listFiles()) {
             PDDocument document = PDDocument.load(file);
             PDFTextStripper textStripper = new PDFTextStripper();
-            //textStripper.setLineSeparator("\\n");
             textStripper.setEndBookmark(new PDOutlineItem());
             String contVal = textStripper.getText(document);
 
@@ -48,7 +47,11 @@ public class SpiderFileUtils {
         String finalCleanText = new String();
         finalCleanText = rawText.replace("'", "");
         //finalCleanText = finalCleanText.replaceAll("([\\/\\/])","\\\n\\\n");
+        finalCleanText = finalCleanText.replaceAll("\\n\\n","\\\\n\\\\n");
+        finalCleanText = finalCleanText.replaceAll("\\n","\\\\n\\\\n");
         finalCleanText = finalCleanText.replace(" \" ", "");
+        finalCleanText = finalCleanText.replace("“"," ");
+        finalCleanText = finalCleanText.replace("”"," ");
         finalCleanText = finalCleanText.replace("<", "&lt;");
         finalCleanText = finalCleanText.replace(">", "&gt;");
         finalCleanText = finalCleanText.replaceAll("([\\[\\d*\\]])", "");
