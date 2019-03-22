@@ -46,12 +46,12 @@ public class SpiderFileUtils {
     public static String cleanExtractedContent(String rawText) {
         String finalCleanText = new String();
         finalCleanText = rawText.replace("'", "");
-        //finalCleanText = finalCleanText.replaceAll("([\\/\\/])","\\\n\\\n");
         finalCleanText = finalCleanText.replaceAll("\\n\\n","\\\\n\\\\n");
         finalCleanText = finalCleanText.replaceAll("\\n","\\\\n\\\\n");
         finalCleanText = finalCleanText.replace(" \" ", "");
         finalCleanText = finalCleanText.replace("“"," ");
         finalCleanText = finalCleanText.replace("”"," ");
+        finalCleanText = finalCleanText.replace("()","");
         finalCleanText = finalCleanText.replace("<", "&lt;");
         finalCleanText = finalCleanText.replace(">", "&gt;");
         finalCleanText = finalCleanText.replaceAll("([\\[\\d*\\]])", "");
