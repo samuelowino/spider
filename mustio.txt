@@ -1,0 +1,7 @@
+Student ID#  First Name Last Name  DOB         address
+123          Tim        Smith      19960215    777 Heavens way
+160          Diablo      Ho         19900420    666 Hells Gate
+999          Tom         Doe        19860215    999 Never Mind
+100          Buffy       Slayer     19960314    456 Seven
+225          Lerui       Jackson    20001114    123 Right Here Alley
+849          Bruce       Lee        19560215    333 Enter the Dragon
